@@ -1,0 +1,278 @@
+/* Body style */
+
+body {
+    margin: 0px;
+    padding: 0px;
+    overflow-x: hidden;
+    background-color: white;
+    text-align: center;
+    color: black;
+    font-family: 'Avenircustom';
+}
+
+.total {
+    padding-left: 3%;
+}
+
+.jobDes {
+    margin-bottom: 50px;
+    display: inline;
+    float: left;
+    height: 395px;
+    width: 20%;
+    max-width: 500px;
+    border: 1px solid black;
+}
+
+.appliContainer {
+    margin-bottom: 50px;
+    display: inline;
+    float: left;
+    width: 75%;
+    max-width: 1500px;
+    height: 395px;
+    border: 1px solid black;
+    overflow-x: scroll;
+    background-color: lightgrey;
+}
+
+.appliContent {
+    display: flex;
+}
+
+
+/* custom font */
+
+@font-face {
+    font-family: Avenircustom;
+    src: url('../fonts/Avenir.ttc');
+}
+
+
+/* custom label */
+
+label {
+    width: 250px;
+    display: inline-block;
+}
+
+label2 {
+    width: 100px;
+    display: inline-block;
+}
+
+label3 {
+    width: 150px;
+    display: inline-block;
+}
+
+label4 {
+    width: 300px;
+    display: inline-block;
+}
+
+
+/* Navigation bar style */
+
+.navigation {
+    text-align: left;
+    overflow: hidden;
+    position: fixed;
+    padding: 6px;
+    height: 35px;
+    width: 100%;
+    background: black;
+    opacity: 0.85;
+    z-index: 1;
+}
+
+.container {
+    position: relative;
+    text-align: center;
+}
+
+.back {
+    width: 100%;
+    height: 750px;
+    object-fit: cover;
+}
+
+.back2 {
+    height: 190px;
+    width: 100%;
+}
+
+.homesearchbar {
+    position: absolute;
+    top: 6%;
+    left: 4%;
+}
+
+.homesb {
+    color: white;
+    border-radius: 5px;
+    margin: auto;
+    width: 580px;
+    height: 180px;
+    opacity: 1;
+    padding: 15px;
+    text-align: left;
+}
+
+a {
+    margin: 15px;
+    text-decoration: none;
+}
+
+.jobDisplay {
+    border: solid;
+    border-color: grey;
+    border-width: 2px;
+    border-radius: 50px;
+    width: 75%;
+    display: inline-block;
+}
+
+.appDisplay {
+    margin: 15px;
+    border: solid;
+    background-color: white;
+    border-color: grey;
+    width: 400px;
+    border-width: 2px;
+    border-radius: 50px;
+    display: inline-block;
+}
+
+.jobDescription {
+    margin: 15px;
+    background-color: white;
+    width: 200px;
+    border-width: 2px;
+    border-radius: 50px;
+    display: inline-block;
+}
+
+.frame {
+    float: left;
+    border-radius: 50px;
+    height: 120px;
+    width: 120px;
+    object-fit: cover;
+    vertical-align: middle;
+    padding: 15px;
+}
+
+.frame2 {
+    height: 150px;
+    width: auto;
+}
+
+.frame3 {
+    border-radius: 50px;
+    height: 120px;
+    width: 120px;
+    object-fit: cover;
+    vertical-align: middle;
+    padding: 15px;
+}
+
+.jobText {
+    margin-top: 57px;
+    display: inline-block;
+    font-size: 22px;
+}
+
+.appText {
+    margin-left: 60px;
+    margin-right: 60px;
+    margin-top: 57px;
+    font-size: 22px;
+}
+
+.desText {
+    font-size: 22px;
+}
+
+.formImage {
+    max-width: 500px;
+    max-height: 300px;
+    object-fit: contain;
+}
+
+.ender {
+    margin: auto;
+    clear: both;
+    position: absolute;
+    background: black;
+    opacity: 0.9;
+    padding: 10px;
+    bottom: 0;
+    width: 100%;
+}
+
+#page-container {
+    position: relative;
+    min-height: 100vh;
+}
+
+#content-wrap {
+    padding-bottom: 2.5rem;
+}
+
+#footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+}
+
+.item {
+    width: 32%;
+    text-align: center;
+    display: block;
+    background-color: transparent;
+    border: 1px solid transparent;
+    margin-right: 0.9%;
+    margin-bottom: 1px;
+    float: left;
+}
+
+
+/* div dimensions */
+
+.center {
+    margin: auto;
+    width: 99%;
+    background: white;
+    opacity: 0.9;
+    padding: 0px;
+}
+
+
+/* loader */
+
+.loader {
+    margin: auto;
+    border: 16px solid #f3f3f3;
+    border-top: 16px solid grey;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+
+/* vertical spacing */
+
+.bottom-space {
+    margin-bottom: 50px;
+}

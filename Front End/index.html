@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="icon" href="icon.png">
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <!-- Link to external style sheet -->
+    <link rel="stylesheet" type="text/css" href="css/main.css">
+    <title>MagicCaster</title>
+</head>
+
+<body>
+    <div id="page-container">
+        <div id="content-wrap">
+            <div class="navigation" id="nav">
+                <a href=index.html>
+                    <span style="font-size: 24px; color:white; vertical-align: -2px;">MagicCaster</span>
+                </a>
+                <span id=loginStatus></span>
+            </div>
+            <div class=container>
+                <img alt="background" class=back src="images/backwall.jpeg">
+                <div class="homesearchbar">
+                    <div class=homesb>
+                        <h1 id=xyz>
+                            <span style="color:black"><b>MagicCaster</b></span>
+                        </h1>
+                        <span style="color:black">Find the talent hidden within you! Use MagicCaster to compare yourself with others and find how well you can imitate them and get hired by possible producers!</span>
+                        <br><br>
+                        <span>You can also upload your own roles by creating a producer account! Use the links below to Login/Sign Up!</span>
+                    </div>
+                </div>
+            </div>
+            <br>
+
+            <div id='options' class=center style="clear:both;">
+                <br>
+                <a href="https://magic-caster.auth.us-east-1.amazoncognito.com/login?client_id=47n69nmb7j252os077oetjtitu&response_type=token&scope=email+openid+profile&redirect_uri=https://rupakbucket3.s3.amazonaws.com/account.html">
+                    <span style="font-size: 50px"><b>Actor Login</b></span>
+                </a>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                <a href="https://magic-caster-producers.auth.us-east-1.amazoncognito.com/login?client_id=130vpuj0pp88642mkr6t1ni1qt&response_type=token&scope=email+openid+profile&redirect_uri=https://rupakbucket3.s3.amazonaws.com/producerAcc.html">
+                    <span style="font-size: 50px"><b>Producer Login</b></span>
+                </a>
+            </div>
+            <br><br>
+            <footer class=ender id=footer>
+                <span style="color: white">MagicCaster - The Ultimate Online Casting</span>
+            </footer>
+        </div>
+    </div>
+
+    <script>
+        //if a user is logged in
+        if (localStorage.getItem('loginToken') != null) {
+            userDetails();
+        }
+
+        function userDetails() {
+            //if an actor is logged in, change links on home page
+            if (localStorage.getItem('accountType') == "Actor") {
+                document.getElementById('loginStatus').innerHTML = "<a href=jobs.html><font size=4 color=white>Jobs</font></a><a style='float:right; padding-right:15px; margin-top: 5px;'' href='account.html'><font size=4 color=white>" + localStorage.getItem('userFullName') + "</font></a>";
+                document.getElementById('options').innerHTML = "<br>" +
+                    "<a href=jobs.html>" +
+                    "<font size=10><b>Jobs</font>" +
+                    "</a>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;" +
+                    "&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;" +
+                    "<a href=account.html>" +
+                    "<font size=10><b>Your Account</font>" +
+                    "</a>";
+            }
+
+            //if a producer is logged in, change links on home page
+            else if (localStorage.getItem('accountType') == "Producer") {
+                document.getElementById('nav').innerHTML += '<a style="vertical-align:-1px;" href=uploadrole.html><font size=4 color=white>Post Job</font></a>';
+                document.getElementById('nav').innerHTML += '<a style="vertical-align:-1px;" href=applicants.html><font size=4 color=white>Applicants</font></a>';
+                document.getElementById('loginStatus').innerHTML = "<a style='float:right; padding-right:15px; margin-top: 5px;'' href='producerAcc.html'><font size=4 color=white>" + localStorage.getItem('userFullName') + "</font></a>";
+                document.getElementById('options').innerHTML = "<br>" +
+                    "<a href=uploadrole.html>" +
+                    "<font size=10><b>Post Job</font>" +
+                    "</a>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;" +
+                    "&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;" +
+                    "<a href=applicants.html>" +
+                    "<font size=10><b>Applicants</font>" +
+                    "</a>";
+            }
+        }
+    </script>
+
+</body>
+
+</html>

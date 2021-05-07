@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="icon" href="icon.png">
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <link rel="icon" href="icon.png">
+    <title>MagicCaster</title>
+    <!-- Link to external style sheet -->
+    <link rel="stylesheet" type="text/css" href="css/main.css">
+</head>
+
+<body>
+    <div id="page-container">
+        <div id="content-wrap">
+            <div class="navigation" id="nav">
+                <a href=index.html>
+                    <span style="font-size: 24px; color:white; vertical-align: -2px;">MagicCaster</span>
+                </a>
+                <a href=uploadrole.html>
+                    <span style="font-size: 18px; color:white;">Post Job</span>
+                </a>
+                <a href=applicants.html>
+                    <span style="font-size: 18px; color:white;">Applicants</span>
+                </a>
+                <a id=loginStatus style="float:right; padding-right:15px; margin-top: 5px;" href=producerAcc.html>
+                    <span style="color:white; vertical-align: -2px;">Your Producer Account</span>
+                </a>
+            </div>
+            <div class=container>
+                <img alt="background" class=back2 src="images/backwall2.jpeg">
+                <div class="homesearchbar">
+                    <div class=homesb>
+                        <br>
+                        <h1 style="color:black;"><b>Post a Job</b></h1>
+                        <span style="color:black;">Fill in the details and files below to post your job role</span>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <h1>Post a Job</h1>
+            </div>
+            <p>Please make sure the face is clearly visible and image contains only one face</p>
+            <p><img id="output" class=formImage /></p>
+
+            <form action="#" onsubmit="uploadJob(); return false">
+                <label>Role Name: </label><input id='role' maxlength="25" required>
+                <p></p>
+                <label style="padding-left: 100px;">Upload JPG Image: </label><input type="file" id="file" accept="image/jpeg" onchange="loadFile(event)" required>
+                <br>
+                <br>
+                <br>
+                <button type=submit>Post Job</button>
+                <br>
+                <br>
+                <progress max=100 value=0></progress>
+            </form>
+            <br>
+            <br>
+            <br>
+        </div>
+        <footer class=ender id=footer>
+            <span style="color:white;">MagicCaster - The Ultimate Online Casting</span>
+        </footer>
+    </div>
+
+    <!-- javascript imports -->
+    <script src="https://sdk.amazonaws.com/js/aws-sdk-2.1.24.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="js/common.js"></script>
+    <script>
+        //log out user if not signed in or expired token
+        if (localStorage.getItem('timeout') == null) {
+            window.location.href = "index.html";
+        }
+        if (localStorage.getItem('accountType') != "Producer") {
+            alert('Error. Please sign in with the correct account type!')
+            window.location.href = "index.html"
+        }
+        let expiry = parseInt(localStorage.getItem('timeout')) + 3600000; //one session lasts 1 hour
+        if (new Date().getTime() > expiry) {
+            alert('Session Timed out. Please sign in again');
+            signOut();
+        }
+        //displaying chosen picture
+        let loadFile = function(event) {
+            let image = document.getElementById('output');
+            image.src = URL.createObjectURL(event.target.files[0]);
+        };
+    </script>
+
+</body>
+
+</html>

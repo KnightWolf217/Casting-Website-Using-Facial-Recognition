@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <link rel="icon" href="icon.png">
+    <title>MagicCaster</title>
+    <!-- Link to external style sheet -->
+    <link rel="stylesheet" type="text/css" href="css/main.css">
+</head>
+
+<body>
+    <div id="page-container">
+        <div id="content-wrap">
+            <div class="navigation" id="nav">
+                <a href=index.html>
+                    <span style="font-size: 24px; color:white; vertical-align: -2px;">MagicCaster</span>
+                </a>
+                <a style="vertical-align:-1px;" href=uploadrole.html>
+                    <span style="font-size: 18px; color:white;">Post Job</span>
+                </a>
+                <a style="vertical-align:-1px;" href=applicants.html>
+                    <span style="font-size: 18px; color:white;">Applicants</span>
+                </a>
+                <a id=loginStatus style="float:right; padding-right:15px; margin-top: 5px;" href=#>
+                </a>
+            </div>
+            <div class=container>
+                <img alt="background" class=back2 src="images/backwall2.jpeg">
+                <div class="homesearchbar">
+                    <div class=homesb>
+                        <br>
+                        <div id='welcome'>
+                        </div>
+                        <span style="color:black;">View your account details below</span>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <h1>Your Producer Account</h1>
+                <div id=userDetails></div>
+            </div>
+            <br>
+            <button onclick="signOut()">Sign Out</button>
+            <br><br>
+        </div>
+        <footer class=ender id=footer>
+            <span style="color:white;">MagicCaster - The Ultimate Online Casting</span>
+        </footer>
+    </div>
+
+    <!-- javascript imports -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="js/common.js"></script>
+    <script>
+        //log out user if not signed in or expired token
+        let expiry = parseInt(localStorage.getItem('timeout')) + 3600000; //one session lasts 1 hour
+        if (new Date().getTime() > expiry) {
+            alert('Session Timed out. Please sign in again');
+            signOut();
+        }
+        if (localStorage.getItem('loginToken') == null) {
+            window.onpaint = createSession();
+        } else printDetails();
+
+        function createSession() {
+            let access_token = new URLSearchParams(window.location.hash).get('access_token');
+
+            $.ajax({
+                url: 'https://magic-caster-producers.auth.us-east-1.amazoncognito.com/oauth2/userInfo',
+                type: 'GET',
+                contentType: 'application/json',
+                headers: {
+                    'Authorization': 'Bearer ' + access_token
+                },
+                success: function(result) {
+                    let now = new Date()
+                    localStorage.setItem('timeout', now.getTime())
+                    localStorage.setItem('loginToken', access_token);
+                    localStorage.setItem('account_id', result.username);
+                    localStorage.setItem('accountType', "Producer");
+                    localStorage.setItem('userEmail', result.email);
+                    localStorage.setItem('userFullName', result.name);
+                    printDetails();
+                },
+                error: function(error) {}
+            });
+        }
+
+        function printDetails() {
+            //redirect if not logged in or incorrect account type
+            if (localStorage.getItem('timeout') == null) {
+                window.location.href = "index.html";
+            }
+            if (localStorage.getItem('accountType') != "Producer") {
+                alert('Invalid Account Type')
+                window.location.href = "index.html"
+            }
+            //displaying producer details
+            document.getElementById('loginStatus').innerHTML = "<font size=4 color=white>" + localStorage.getItem('userFullName') + "</font>";
+            document.getElementById('welcome').innerHTML = "<font color=black><b><h1>Welcome " + localStorage.getItem('userFullName') + "</b></h1>";
+            document.getElementById('userDetails').innerHTML = '<p><b>Name - </b>' + localStorage.getItem('userFullName') + '</p>' +
+                '<p><b>Email - </b>' + localStorage.getItem('userEmail') + '</p>' +
+                '<p></p>';
+        }
+    </script>
+
+</body>
+
+</html>

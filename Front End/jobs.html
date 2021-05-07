@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <link rel="icon" href="icon.png">
+    <title>MagicCaster</title>
+    <!-- Link to external style sheet -->
+    <link rel="stylesheet" type="text/css" href="css/main.css">
+</head>
+
+<body>
+    <div id="page-container">
+        <div id="content-wrap">
+            <div class="navigation" id="nav">
+                <a href=index.html>
+                    <span style="font-size: 24px; color:white; vertical-align: -2px;">MagicCaster</span>
+                </a>
+                <a href=jobs.html>
+                    <span style="font-size: 18px; color:white;">Jobs</span>
+                </a>
+                <a id=loginStatus style="float:right; padding-right:15px; margin-top: 5px;" href=account.html>
+                    <span style="color:white; vertical-align: -2px;">Your Account</span>
+                </a>
+            </div>
+            <div class=container>
+                <img alt="background" class=back2 src="images/backwall2.jpeg">
+                <div class="homesearchbar">
+                    <div class=homesb>
+                        <br>
+                        <h1 style="color:black"><b>Jobs</b></h1>
+                        <span style="color:black">Browse your top matches below!</span>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <h1>Jobs</h1>
+                Producers will contact you by email if you're a potential candidate!
+                <br><br>
+                <div id="jobs">
+                </div>
+            </div>
+
+        </div>
+        <footer class=ender id=footer>
+            <span style="color:white;">MagicCaster - The Ultimate Online Casting</span>
+        </footer>
+    </div>
+
+    <!-- javascript imports-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="https://sdk.amazonaws.com/js/aws-sdk-2.16.0.min.js"></script>
+    <script>
+        //log out user if not signed in or expired token
+        if (localStorage.getItem('timeout') == null) {
+            window.location.href = "index.html";
+        }
+        let expiry = parseInt(localStorage.getItem('timeout')) + 3600000; //one session lasts 1 hour
+        if (new Date().getTime() > expiry) {
+            alert('Session Timed out. Please sign in again');
+            signOut();
+        }
+        if (localStorage.getItem('accountType') != "Actor") {
+            alert('Error. Please sign in with the correct account type!')
+            window.location.href = "index.html"
+        }
+        $.ajax({
+            url: "https://es1l2xdih9.execute-api.us-east-1.amazonaws.com/default/getApplied?token=" + localStorage.getItem('loginToken'),
+            type: 'GET',
+            success: function(result) {
+                //sorting jobs by match
+                result.Items.sort(function(a, b) {
+                    return b.face_score - a.face_score;
+                });
+                //displaying jobs
+                for (let i = 0; i < result.Items.length; i++) {
+                    document.getElementById('jobs').innerHTML += '<div class=jobDisplay>' +
+                        '<img class=frame src=https://rupakbucket3.s3.amazonaws.com/jobs/' + result.Items[i].job_id + '.jpg>' +
+                        '<p class=jobText>' + result.Items[i].role_name + '</p>' +
+                        '<p class=jobText style="padding-inline: 0px; padding-left: 15%;">Your Face Match: <b>' + result.Items[i].face_score + '</b></p> ' +
+                        '</div>' +
+                        '<h1></h1>';
+                }
+            },
+            error: function(error) {
+                console.log(error)
+            }
+        });
+    </script>
+
+</body>
+
+</html>

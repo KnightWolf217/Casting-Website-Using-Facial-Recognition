@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="icon" href="icon.png">
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <link rel="icon" href="icon.png">
+    <title>MagicCaster</title>
+    <!-- Link to external style sheet -->
+    <link rel="stylesheet" type="text/css" href="css/main.css">
+</head>
+
+<body>
+    <div id="page-container">
+        <div id="content-wrap">
+            <div class="navigation" id="nav">
+                <a href=index.html>
+                    <span style="font-size: 24px; color:white; vertical-align: -2px;">MagicCaster</span>
+                </a>
+                <a href=uploadrole.html>
+                    <span style="font-size: 18px; color:white;">Post Job</span>
+                </a>
+                <a href=applicants.html>
+                    <span style="font-size: 18px; color:white;">Applicants</span>
+                </a>
+                <a id=loginStatus style="float:right; padding-right:15px; margin-top: 5px;" href=producerAcc.html>
+                    <span style="color:white; vertical-align: -2px;">Your Producer Account</span>
+                </a>
+            </div>
+            <div class=container>
+                <img alt="background" class=back2 src="images/backwall2.jpeg">
+                <div class="homesearchbar">
+                    <div class=homesb>
+                        <br>
+                        <h1 id=xyz>
+                            <span style="color: black"><b>Available Actors</b></span>
+                        </h1>
+                        <span style="color: black">View potential candidates for your roles below</span>
+                    </div>
+                </div>
+            </div>
+
+            <h1>Best Matched Actors</h1>
+            <div id=allApplicants class=total>
+            </div>
+        </div>
+    </div>
+
+    <!-- javascript imports -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="https://sdk.amazonaws.com/js/aws-sdk-2.16.0.min.js"></script>
+    <script>
+        let now = new Date().getTime();
+        //log out user if not signed in or expired token
+        if (localStorage.getItem('timeout') == null) {
+            window.location.href = "index.html";
+        }
+        if (localStorage.getItem('accountType') != "Producer") {
+            alert('Error. Please sign in with the correct account type!')
+            window.location.href = "index.html"
+        }
+        let expiry = parseInt(localStorage.getItem('timeout')) + 3600000; //one session lasts 1 hour
+        if (new Date().getTime() > expiry) {
+            alert('Session Timed out. Please sign in again');
+            signOut();
+        }
+        //display loading animation
+        document.getElementById('allApplicants').innerHTML = '<div class=loader></div>';
+        $.ajax({
+            url: 'https://es1l2xdih9.execute-api.us-east-1.amazonaws.com/default/getApplicants?token=' + localStorage.getItem('loginToken'),
+            type: 'GET',
+            success: function(result) {
+                //sorting by latest jobs first
+                result.Items.sort(function(a, b) {
+                    return b.job_id - a.job_id;
+                });
+                document.getElementById('allApplicants').innerHTML = ''; //stop loading animation
+                //displaying jobs and their applicants
+                let arrayFilter = [];
+                for (let x = 0; x < result.Items.length; x++) {
+                    if ($.inArray(result.Items[x].job_id, arrayFilter) == -1) {
+                        arrayFilter.push(result.Items[x].job_id);
+                        document.getElementById('allApplicants').innerHTML += '<div id=description' + x + ' class="jobDes"></div>' +
+                            '<div class="appliContainer">' +
+                            '<div id=applicants' + x + ' class="appliContent">' +
+                            '</div>' +
+                            '</div>';
+                        let name = result.Items[x].role_name;
+                        let array = [];
+                        let image = result.Items[x].job_id;
+                        for (let i = 0; i < result.Items.length; i++) {
+                            if (result.Items[i].role_name == name) {
+                                array.push(result.Items[i])
+                            }
+                        }
+                        document.getElementById('description' + x).innerHTML += '<div class=jobDescription><h1></h1><br>' +
+                            '<img class=frame3 src=https://rupakbucket3.s3.amazonaws.com/jobs/' + image + '.jpg>' +
+                            '<p class=desText>' + name + '</p>' +
+                            '</div>';
+                        for (let y = 0; y < array.length; y++) {
+                            array.sort(function(a, b) {
+                                return b.face_score - a.face_score;
+                            });
+                            document.getElementById('applicants' + x).innerHTML += '<div class=appDisplay>' +
+                                '<img class=frame src=https://rupakbucket3.s3.amazonaws.com/users/' + array[y].applicant_email + '.jpg?dummy=' + now + '>' +
+                                '<p class=appText>' + array[y].applicant_name + '</p>' +
+                                '<p class=appText style="padding-inline: 0px;">Face Score: ' + array[y].face_score + '</p> ' +
+                                '<p class=appText>Contact: ' + array[y].applicant_email + '</p>' +
+                                '</div>';
+                        }
+                    }
+                }
+            },
+            error: function(error) {
+                console.log(error)
+            }
+        });
+    </script>
+
+</body>
+
+</html>
